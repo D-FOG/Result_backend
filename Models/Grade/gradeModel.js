@@ -16,6 +16,10 @@ const GradeSchema = new Schema({
     gradeValue: {
         type: String,
     },
+    matno:{
+        type: String,
+        unique: true
+    },
     academicYear: {
         type: Number,
     },

@@ -25,17 +25,23 @@ const Grade = require('../../Models/Grade/gradeModel')
 
 router.get('/', (req,res) => {
     try{
+        const {levelNumber} = req.body
         Level.findOne({levelNumber})
-            .populate('semester.courses.grade', '-_id')
-            .exec()
             .then(course => {
-                res.status(200).send(course);
+                const array = course.semester[0].courses
+
+                // array.map(val => {
+                //     res.status(200).send(val.creditUnits);
+                // })
+
+                const courseArray = array[0].creditUnits
+               console.log(courseArray)
             })
             .catch(err => {
                 res.status(400).send(`Not found: ${err}`);
             })
     } catch (error){
-        res.status(500).status(`Internal error: ${error}`);
+        res.status(500).send(`Internal error: ${error}`);
     }
 });
 
@@ -57,49 +63,75 @@ router.post('/', (req,res) => {
         //         // }
         //         res.status(409).json({error:`${ isStudentFields } already exists`})
         //     }
+
+        //const fetchGrade = Grade.findOne({courseNumber});
+        const courseDoc = new Course({name, code, creditUnits, subjectNumber, grade: fetchGrade._id})
             
-        if (courseNumber === subjectNumber){
-            //const grade = Grade.findOne({courseNumber})
-            const courseDoc = new Course({name, code, creditUnits, subjectNumber})
+        const semesterDoc = new Semester({
+            semesterNumber,
+            courses: courseDoc
+         });
+         // semesterDoc.save();
+ 
+         const course = new Level({
+             levelNumber, 
+            semester: semesterDoc
+         })
+         course.save()
+             .then(courses => {
+                 res.status(200).send(courses);
+             })
+             .catch(err => {
+                 res.status(500).send("Not able to create course database")
+             })
             
-            const semesterDoc = new Semester({
-                semesterNumber,
-                courses: courseDoc
-             });
-             // semesterDoc.save();
+        // if (courseNumber === subjectNumber){
+        //     //const grade = Grade.findOne({courseNumber})
+        //     const courseDoc = new Course({name, code, creditUnits, subjectNumber})
+            
+        //     const semesterDoc = new Semester({
+        //         semesterNumber,
+        //         courses: courseDoc
+        //      });
+        //      // semesterDoc.save();
      
-             const course = new Level({
-                 levelNumber, 
-                semester: semesterDoc
-             })
-             course.save()
-                 .then(courses => {
-                     res.status(200).send(courses);
-                 })
-                 .catch(err => {
-                     res.status(500).send("Not able to create course database")
-                 })
-        } else {
-            const courseDoc = new Course({name, code, creditUnits, subjectNumber})
-            const semesterDoc = new Semester({
-                semesterNumber,
-                courses: courseDoc
-             });
-             // semesterDoc.save();
+        //      const course = new Level({
+        //          levelNumber, 
+        //         semester: semesterDoc
+        //      })
+        //      course.save()
+        //          .then(courses => {
+        //              res.status(200).send(courses);
+        //          })
+        //          .catch(err => {
+        //              res.status(500).send("Not able to create course database")
+        //          })
+        // } else {
+        //     const courseDoc = new Course({name, code, creditUnits, subjectNumber})
+        //     const semesterDoc = new Semester({
+        //         semesterNumber,
+        //         courses: courseDoc
+        //      });
+        //      // semesterDoc.save();
      
-             const course = new Level({
-                 levelNumber, 
-                semester: semesterDoc
-             })
-             course.save()
-                 .then(courses => {
-                     res.status(200).send(courses);
-                 })
-                 .catch(err => {
-                     res.status(500).send("Not able to create course database")
-                 })
-        }
+        //      const course = new Level({
+        //          levelNumber, 
+        //         semester: semesterDoc
+        //      })
+        //      course.save()
+        //          .then(courses => {
+        //              res.status(200).send(courses);
+        //          })
+        //          .catch(err => {
+        //              res.status(500).send("Not able to create course database")
+        //          })
+        // }
         // courseDoc.save()
+        // Level.findOne({semesterNumber})
+        //     .populate('semester.courses.grade')
+        //     .then( course => {
+        //         res.send(course)
+        //     })
 
         
             
@@ -180,7 +212,7 @@ router.delete('/', (req, res) => {
                 res.status(400).send(`Not found: ${err}`);
             })
     } catch (error){
-        res.status(500).status(`Internal error: ${error}`);
+        res.status(500).send(`Internal error: ${error}`);
     }
 });
 module.exports = router

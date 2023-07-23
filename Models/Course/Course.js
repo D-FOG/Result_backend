@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-//const Grade = require('../Grade/gradeModel').schema;
+const Grade = require('../Grade/gradeModel');
 
 const Schema = mongoose.Schema;
 
@@ -12,7 +12,7 @@ const subjectSchema = new Schema({
     code: String,
     creditUnits: Number,
     grade: [{
-        type: Number,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'Grade'
     }],
     updateAt:{

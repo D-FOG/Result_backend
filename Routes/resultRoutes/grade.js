@@ -7,7 +7,8 @@ router.get('/', (req,res) => {
     const {courseNumber} = req.body
     Grade.findOne({courseNumber})
         .then(grades => {
-            res.status(201).send(`Grades fetched successfully ${grades}`)
+            res.status(201).send(grades)
+            console.log(grades._id)
         })
         .catch(error => {
             res.status(404).send(`Grades not found ${error}`)
