@@ -4,21 +4,17 @@ const Schema = mongoose.Schema;
 
 const AdminSchema = new Schema({
     adminNumber: {
-        Type: Number,
-        required: true,
+        type: Number,
         unique: true
     },
     firstName: {
         type: String,
-        required: true
     },
     LastName: {
         type: String,
-        required: true
     },
     middleName: {
         type: String,
-        required: true
     },
     email: {
         type: String,
@@ -28,10 +24,12 @@ const AdminSchema = new Schema({
         type: String,
         required: true
     },
-    createdAt: Date.now(),
-    updatedAt: Date.now()
+    updatedAt: {
+        type: Date,
+        default: Date.now()
+    }
 })
 
-const Admin = mongoose.model('TotaleGrade', AdminSchema);
+const Admin = mongoose.model('Admin', AdminSchema);
 
 module.exports = Admin

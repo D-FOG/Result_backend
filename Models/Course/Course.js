@@ -1,62 +1,60 @@
 const mongoose = require('mongoose');
+//const Grade = require('../Grade/gradeModel').schema;
 
-const Schema = new mongoose.Schema;
+const Schema = mongoose.Schema;
 
-const CourseDetailsSchema = new Schema({
-    courseNumber: {
+const subjectSchema = new Schema({
+    subjectNumber: { 
         type: Number,
-        required: true,
-        unique: true,
+        unique: true
     },
-    courseName: {
-        type: String,
-        required: true,
-    },
-    courseCredit: {
+    name: String,
+    code: String,
+    creditUnits: Number,
+    grade: [{
         type: Number,
-        required: true,
-    },
-})
+        ref: 'Grade'
+    }],
+    updateAt:{
+        type :Date,
+        default: Date.now()
+    }
+});
 
-const SemesterSchema = new Schema({
-    semester1: CourseDetailsSchema,
-    semester2: CourseDetailsSchema
-})
+const Course = mongoose.model('Course', subjectSchema)
 
-const CourseSchema = new Schema({
-    level: {
+
+const semesterSchema = new Schema({
+    semesterNumber: {
         type: Number,
-        required:true,
-        unique
+        unique: true
     },
-    
-    semesterCourses: SemesterSchema,
-    
-    createdAt: {
-        type: Date,
-        required: true,
-    },
+    courses: [subjectSchema],
     updatedAt: {
         type: Date,
-        required: true,
+        default: Date.now()
+    }
+});
+const Semester = mongoose.model('Semester', semesterSchema)
+
+const levelSchema = new Schema({
+    levelNumber:{
+        type: Number,
+        unique: true
     },
+    semester: [semesterSchema],
+    // secondSemester: secondSemesterSchema,
+    updatedAt: {
+        type: Date,
+        default: Date.now()
+    }
 })
 
-CourseSchema.pre('save', function(next) {
-    this.updatedAt = Date.now();
-    next();
-});
 
-CourseSchema.virtual('formattedCreatedAt').get(function () {
-    return moment(this.createdAt).format('YYYY-MM-DD-HH:mm:SS');
-});
-CourseSchema.virtual('formattedUpadateAt').get(function () {
-    return moment(this.UpdatedAt).format('YYYY-MM-DD-HH:mm:SS');
-});
+const Level = mongoose.model('Level', levelSchema) 
 
-CourseSchema.set('toObject', { getters:true });
-CourseSchema.set('toJSON', { getters:true });
-
-const Course = mongoose.model('Course', CourseSchema)
-
-module.exports = Course
+module.exports = {
+    Level,
+    Course,
+    Semester
+}

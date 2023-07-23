@@ -1,7 +1,11 @@
 const express = require('express');
 const db = require('./db')
 require('dotenv').config();
-const route = require('./Routes/studentsRoutes/student')
+const studentRoute = require('./Routes/studentsRoutes/student')
+const adminRoute = require('./Routes/adminRoutes/admin') 
+const courseRoute = require('./Routes/coursesRoutes/course')
+const resultRoute = require('./Routes/resultRoutes/grade')
+//const 
 const app = express();
 
 app.use(express.json());
@@ -12,7 +16,10 @@ app.get('/', (req, res) => {
     res.send("hello ma world");
 })
 
-app.use('/routes', route)
+app.use('/students', studentRoute)
+app.use('/admin', adminRoute)
+app.use('/course', courseRoute)
+app.use('/results', resultRoute)
 
 db();
 

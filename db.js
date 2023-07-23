@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 require('dotenv').config()
 
-const URI = `mongodb+srv://fogbonda017:${process.env.URIPASS}@studentcluster.75dnuzz.mongodb.net/student`
+const URI = `mongodb+srv://fogbonda017:${process.env.URIPASS}@studentcluster.75dnuzz.mongodb.net/uniport_csc_database`
 
 const dbConnect = async () => {
     try{
