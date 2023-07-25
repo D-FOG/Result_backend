@@ -3,39 +3,16 @@ const router = express.Router()
 const {Level, Course, Semester} = require('../../Models/Course/Course')
 const Grade = require('../../Models/Grade/gradeModel')
 
-// function findData(data, value){
-//     let query = {}
-
-//     switch(data){
-//         case 'levelNumber':
-//             query = {levelNumber: value};
-//             break;
-    
-//         case 'semesterNumber':
-//             query = {semesterNumber: value};
-//             break;
-    
-//         case 'subjectNumber':
-//             query = {subjectNumber: value};
-//             break;
-//         default:
-//             return `invalid input type`
-//     }
-// }
 
 router.get('/', (req,res) => {
     try{
         const {levelNumber} = req.body
-        Level.findOne({levelNumber})
+        Level.find({levelNumber})
             .then(course => {
-                const array = course.semester[0].courses
-
-                // array.map(val => {
-                //     res.status(200).send(val.creditUnits);
-                // })
-
-                const courseArray = array[0].creditUnits
-               console.log(courseArray)
+                // const array = course.semester[0].courses
+                // const courseArray = array[0].creditUnits
+               // console.log(courseArray)
+               res.send(course)
             })
             .catch(err => {
                 res.status(400).send(`Not found: ${err}`);
@@ -48,30 +25,14 @@ router.get('/', (req,res) => {
 
 router.post('/', (req,res) => {
     try{
-        const {name, code, creditUnits, subjectNumber, semesterNumber, courseNumber} = req.body
+        const {name, code, creditUnits, subjectNumber, semesterNumber} = req.body
         const {levelNumber} = req.body;
-        
-        // Course.findOne({$or: [{subjectNumber, semesterNumber}]})
-        // .then(isCourse => {
-        //     if (isCourse) {
-        //         const isCoursefieldsFields = []
-        //         if (isCourse.semstNumber === levelNumber){
-        //             isStudentFields.push('Y')
-        //         }
-        //         // if (isStudents.studentEmail === studentEmail){
-        //         //     isStudentFields.push('Student email')
-        //         // }
-        //         res.status(409).json({error:`${ isStudentFields } already exists`})
-        //     }
-
-        //const fetchGrade = Grade.findOne({courseNumber});
-        const courseDoc = new Course({name, code, creditUnits, subjectNumber, grade: fetchGrade._id})
+        const courseDoc = new Course({name, code, creditUnits, subjectNumber})
             
         const semesterDoc = new Semester({
             semesterNumber,
             courses: courseDoc
          });
-         // semesterDoc.save();
  
          const course = new Level({
              levelNumber, 
@@ -83,57 +44,7 @@ router.post('/', (req,res) => {
              })
              .catch(err => {
                  res.status(500).send("Not able to create course database")
-             })
-            
-        // if (courseNumber === subjectNumber){
-        //     //const grade = Grade.findOne({courseNumber})
-        //     const courseDoc = new Course({name, code, creditUnits, subjectNumber})
-            
-        //     const semesterDoc = new Semester({
-        //         semesterNumber,
-        //         courses: courseDoc
-        //      });
-        //      // semesterDoc.save();
-     
-        //      const course = new Level({
-        //          levelNumber, 
-        //         semester: semesterDoc
-        //      })
-        //      course.save()
-        //          .then(courses => {
-        //              res.status(200).send(courses);
-        //          })
-        //          .catch(err => {
-        //              res.status(500).send("Not able to create course database")
-        //          })
-        // } else {
-        //     const courseDoc = new Course({name, code, creditUnits, subjectNumber})
-        //     const semesterDoc = new Semester({
-        //         semesterNumber,
-        //         courses: courseDoc
-        //      });
-        //      // semesterDoc.save();
-     
-        //      const course = new Level({
-        //          levelNumber, 
-        //         semester: semesterDoc
-        //      })
-        //      course.save()
-        //          .then(courses => {
-        //              res.status(200).send(courses);
-        //          })
-        //          .catch(err => {
-        //              res.status(500).send("Not able to create course database")
-        //          })
-        // }
-        // courseDoc.save()
-        // Level.findOne({semesterNumber})
-        //     .populate('semester.courses.grade')
-        //     .then( course => {
-        //         res.send(course)
-        //     })
-
-        
+             })   
             
     } catch(error){
         res.status(500).send(`Error: ${error}`)
@@ -143,35 +54,7 @@ router.post('/', (req,res) => {
 router.put('/', (req, res) => {
     const { levelNumber, name, code, creditUnits, semesterNumber, subjectNumber} = req.body;
     const body = req.body;
-    //console.log(body)
     try{
-        // const student = Level.findOne({$or: [{ levelNumber, semesterNumber, subjectNumber }]})
-        //     .then(isCourse => {
-        //         if (isCourse) {
-        //             const isCourseFields = []
-        //             if (isCourse.matNo === matNo){
-        //                 isCourseFields.push('Matriculation number')
-        //             }
-        //             // if (isStudents.studentEmail === studentEmail){
-        //             //     isStudentFields.push('Student email')
-        //             // }
-        //             res.status(409).json({error:`${ isStudentFields } already exists`})
-        //         } else {
-        //             Student.findOneAndUpdate({studentEmail}, { firstName, lastName, middleName, matNo },{new: true})
-        //                 .then(students => {
-        //                     res.status(200).send(students);
-        //                 })
-        //                 .catch(err => {
-        //                     res.status(400).send(`Failed to upload students: ${err}`);
-        //                 })
-        //         }
-        //    })
-        const updateQuery = {};
-        // if (body.semester.courses){
-        //     if (body.semester.courses.name){
-        //         updateQuery['semester.course.name'] = body.semester.courses.name;
-        //     }
-        // }
         Level.findOneAndUpdate(
             {
               levelNumber,
@@ -216,4 +99,3 @@ router.delete('/', (req, res) => {
     }
 });
 module.exports = router
-//semesterNumber, subjectNumber, name, code, creditUnits

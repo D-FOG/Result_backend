@@ -1,11 +1,15 @@
 const express = require('express')
+const bcrypt = require('bcrypt')
 const Student = require('../../Models/Student/studentModel')
 const database = require('../../database.json')
 const router = express.Router();
+//const bcrypt = require('bcrypt')
+
 
 router.post('/', async (req, res) => {
     const studentBody = req.body;
-    const {matNo, studentEmail} = req.body;
+    const {matNo, studentEmail, password} = req.body;
+    
     try{
         const student = await Student.findOne({$or: [{ matNo },{ studentEmail }]})
             .then(isStudents => {
@@ -19,6 +23,27 @@ router.post('/', async (req, res) => {
                     }
                     res.status(409).json({error:`${ isStudentFields } already exists`})
                 } else {
+                   function hashPassword(userPassword, callback) {
+                        const saltRounds = 10;
+
+                        bcrypt.hash(userPassword, saltRounds, (err, hashedPassword) => {
+                            if (err) {
+                            console.error('Error while hashing the password:', err);
+                            return callback(err, null);
+                            }
+
+                            // Return the hashed password through the provided callback
+                            callback(null, hashedPassword);
+                        });
+                    }
+
+                        // Usage example:
+                    const userPassword = password;
+                    hashPassword(userPassword, (hashErr, hashedPassword) => {
+                    if (!hashErr) {
+                        console.log('Hashed password:', hashedPassword);
+                    }
+                    });
                     const students = new Student(studentBody)
                     students.save()
                         .then(students => {

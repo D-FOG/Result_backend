@@ -5,7 +5,8 @@ const studentRoute = require('./Routes/studentsRoutes/student')
 const adminRoute = require('./Routes/adminRoutes/admin') 
 const courseRoute = require('./Routes/coursesRoutes/course')
 const resultRoute = require('./Routes/resultRoutes/grade')
-//const 
+const studentGradeRoute = require('./Routes/studentGradeRoute/studentGradeRoute')
+const bcrypt = require('bcrypt')
 const app = express();
 
 app.use(express.json());
@@ -20,6 +21,52 @@ app.use('/students', studentRoute)
 app.use('/admin', adminRoute)
 app.use('/course', courseRoute)
 app.use('/results', resultRoute)
+app.use('/Grade', studentGradeRoute)
+
+
+
+
+
+// async function hash(){
+//     let array = []
+//         const password = `favour`
+//         const hashedPassword = await bcrypt.hash(password, 10)
+//         return hashedPassword
+    
+    
+//     // array.push(hashedPassword)
+//     // console.log(hashedPassword)
+//     // console.log(typeof hashedPassword)
+
+//     // bcrypt.compare(hashedPassword, password, (err, isPassword) => {
+//     //     if (err){
+//     //         console.log(`password incorrect fatal error: ${err}`)
+//     //     } else if (isPassword){
+//     //         console.log('passwords are matching')
+//     //     } else {
+//     //         console.log(`access denied`)
+//     //     }
+//     // })
+// }
+
+
+// try {
+//     const data = hash()
+//     return data
+// } catch (err) {
+//     console.log(err)
+// }
+// // const vall = hash()
+
+// console.log(data)
+
+// async function unHash(){
+//     const matchPassword = bcrypt.compare(hashedPassword, password)
+//     console.log(matchPassword)
+// }
+
+// unHash()
+
 
 db();
 
