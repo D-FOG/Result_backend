@@ -6,7 +6,6 @@ const adminRoute = require('./Routes/adminRoutes/admin')
 const courseRoute = require('./Routes/coursesRoutes/course')
 const resultRoute = require('./Routes/resultRoutes/grade')
 const studentGradeRoute = require('./Routes/studentGradeRoute/studentGradeRoute')
-const bcrypt = require('bcrypt')
 const app = express();
 
 app.use(express.json());
