@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "api/index.js",
-    "dev": "api/index.js"
+    "start": "index.js",
+    "dev": "index.js"
   },
   "author": "",
   "license": "ISC",
