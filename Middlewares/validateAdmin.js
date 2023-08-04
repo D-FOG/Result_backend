@@ -22,7 +22,7 @@ const createAdminSchema = joi.object({
     lastName:joi.string().label('Last name').custom(capitalizeFirstLetter).required(),
     middleName:joi.string().label('Middle name').custom(capitalizeFirstLetter).required(),
     password:joi.string().min(6).max(8).label('password'),
-    passwordConfirm:joi.string().ref(password),
+    passwordConfirm:joi.string().valid(joi.ref('password')).required(),
     email:joi.string().email().label('Email').custom(toLowerCase).required()
 })
 
@@ -31,7 +31,6 @@ const updateAdminSchema = joi.object({
     lastName:joi.string().label('Last name').custom(capitalizeFirstLetter),
     middleName:joi.string().label('Middle name').custom(capitalizeFirstLetter),
     password:joi.string().min(6).max(8).label('password'),
-    passwordConfirm:joi.string().ref(password),
     email:joi.string().email().label('Email').custom(toLowerCase)
 })
 
